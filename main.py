@@ -15,7 +15,7 @@ if load_saved_data:
   input_batch_val = np.load(outfile)
   outfile = 'output_batch_val_step1_560.npy'
   output_batch_val = np.load(outfile)
-  else:
+else:
     df_trains, df_tests, df_vals, df_val_targets = load_data.load_data()
   
   input_tensor = preprocess(df_trains)
