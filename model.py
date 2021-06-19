@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.modules.conv as conv
-
+from torch import Tensor
+from typing import Type, Any, Callable, Union, List, Optional
 
 class AddCoords(nn.Module):
     def __init__(self, rank, with_r=False, use_cuda=False):
@@ -131,11 +132,6 @@ class CoordConv1d(conv.Conv1d):
         out = self.conv(out)
 
         return out
-      
- import torch
-from torch import Tensor
-import torch.nn as nn
-from typing import Type, Any, Callable, Union, List, Optional
 
 channel_size = input_batch.shape[1]
 
