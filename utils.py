@@ -86,7 +86,7 @@ def save_ckpt(state, is_best):
 
 
 
-def load_ckp(model, optimizer):
+def load_ckpt(model, optimizer):
   checkpoint_fpath = 'stock_predict_best_old_channel5.pt'
   checkpoint = torch.load(checkpoint_fpath)
   model.load_state_dict(checkpoint['state_dict'])
