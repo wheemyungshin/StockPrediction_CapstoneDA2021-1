@@ -23,11 +23,9 @@ import torch
 import torch.nn as nn
 import torch.nn.modules.conv as conv
 
-
 if not sys.warnoptions:
     warnings.simplefilter('ignore')
   
-!pip install -U finance-datareader
 import FinanceDataReader as fdr
 # sample execution (requires torchvision)0
 from PIL import Image
