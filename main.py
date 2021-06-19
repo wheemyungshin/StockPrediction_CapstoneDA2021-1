@@ -5,13 +5,13 @@ import load_data
 load_saved_data = False
 
 if load_saved_data:
-  outfile = '/content/drive/MyDrive/stock_predict_models/input_batch_step1_560.npy'
+  outfile = 'input_batch_step1_560.npy'
   input_batch = np.load(outfile)
-  outfile = '/content/drive/MyDrive/stock_predict_models/output_batch_step1_560.npy'
+  outfile = 'output_batch_step1_560.npy'
   output_batch = np.load(outfile)
-  outfile = '/content/drive/MyDrive/stock_predict_models/input_batch_val_step1_560.npy'
+  outfile = 'input_batch_val_step1_560.npy'
   input_batch_val = np.load(outfile)
-  outfile = '/content/drive/MyDrive/stock_predict_models/output_batch_val_step1_560.npy'
+  outfile = 'output_batch_val_step1_560.npy'
   output_batch_val = np.load(outfile)
   else:
     df_trains, df_tests, df_vals, df_val_targets = load_data.load_data()
@@ -38,13 +38,13 @@ if load_saved_data:
       #transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
   ])
   
-  outfile = '/content/drive/MyDrive/stock_predict_models/input_batch_step1_560'
+  outfile = 'input_batch_step1_560'
   np.save(outfile, input_batch)
-  outfile = '/content/drive/MyDrive/stock_predict_models/output_batch_step1_560'
+  outfile = 'output_batch_step1_560'
   np.save(outfile, output_batch)
-  outfile = '/content/drive/MyDrive/stock_predict_models/input_batch_val_step1_560'
+  outfile = 'input_batch_val_step1_560'
   np.save(outfile, input_batch_val)
-  outfile = '/content/drive/MyDrive/stock_predict_models/output_batch_val_step1_560'
+  outfile = 'output_batch_val_step1_560'
   np.save(outfile, output_batch_val)
   
  
