@@ -16,7 +16,7 @@ if load_saved_data:
   outfile = 'output_batch_val_step1_560.npy'
   output_batch_val = np.load(outfile)
 else:
-    df_trains, df_tests, df_vals, df_val_targets = load_data.load_data()
+  df_trains, df_tests, df_vals, df_val_targets = load_data.load_data()
   
   input_tensor = preprocess(df_trains)
   input_batch = np.transpose(input_tensor, (1,2,0)).float()#input_tensor.unsqueeze(0) # create a mini-batch as expected by the model
