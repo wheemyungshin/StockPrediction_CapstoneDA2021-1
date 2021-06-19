@@ -67,11 +67,9 @@ def accuracy(output, target, threshold=0.5):
     
     return correct.sum() / output.shape[0], true_positive.sum() / predicted_positive_indexes.shape[0], crucial_fail.sum() / predicted_positive_indexes.shape[0], soso_fail.sum() / predicted_positive_indexes.shape[0]
   
-  import time
-
+import time
 import torch
 import torch.nn as nn
-
 import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset, DataLoader, ConcatDataset, random_split
