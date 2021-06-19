@@ -85,7 +85,7 @@ def load_data():
 
     df_log2 = pd.concat([df_log2, df_log_extra],axis=1)
 
-   df_trains = np.array([])
+  df_trains = np.array([])
   df_tests = np.array([])
   df_vals = np.array([])
   df_val_targets = np.array([])
