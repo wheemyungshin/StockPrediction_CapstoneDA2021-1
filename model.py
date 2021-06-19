@@ -133,7 +133,7 @@ class CoordConv1d(conv.Conv1d):
 
         return out
 
-channel_size = input_batch.shape[1]
+channel_size = 12
 
 def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> nn.Conv1d:
     """3x3 convolution with padding"""
