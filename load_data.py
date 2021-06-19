@@ -4,7 +4,6 @@ sample_step = 1
 split_iter = 37
 split_stride = 1
 
-import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -14,7 +13,6 @@ from datetime import datetime
 from datetime import timedelta
 from tqdm import tqdm
 sns.set()
-tf.compat.v1.random.set_random_seed(1234)
 
 import sys
 import warnings
