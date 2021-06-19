@@ -83,15 +83,6 @@ criterion = torch.nn.BCELoss()
 
 model = model
 criterion = criterion
-
-
-# Check number of parameters your model
-pytorch_total_params = sum(p.numel() for p in model.parameters())
-print(f"Number of parameters: {pytorch_total_params}")
-#if int(pytorch_total_params) > 2000000:
-#    print('Your model has the number of parameters more than 2 millions..')
-#    return
-
 start_epoch = 0
 
 # resume
