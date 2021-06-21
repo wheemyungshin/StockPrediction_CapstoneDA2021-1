@@ -53,6 +53,29 @@ def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, d
 ```
 
 
+* 실제 수익성을 알아보기 위해 accurcay를 포함한 세가지 지수(Precision, Crucial-Fail, Soso-Fail)를 계산하였다.
+또한, Thresholding을 통해 최적의 precision을 갖는 threshold를 선택하여 사용할 수 있다. (utils.py)
+
+```
+def accuracy(output, target, threshold=0.5):
+    r"""Computes the accuracy over the $k$ top predictions for the specified values of k
+    """
+    output = output > threshold
+    target = target.squeeze()
+    correct = (target == output)
+    #print("C: ", correct)
+    correct = torch.all(correct, dim=1)
+
+    predicted_positive_indexes = (output[:,0].nonzero(as_tuple=True)[0])
+    true_positive = (target[:,0])[predicted_positive_indexes]
+
+    crucial_fail = (target[:,1])[predicted_positive_indexes]
+    soso_fail = (target[:,2])[predicted_positive_indexes]
+    
+    return correct.sum() / output.shape[0], true_positive.sum() / predicted_positive_indexes.shape[0], crucial_fail.sum() / predicted_positive_indexes.shape[0], soso_fail.sum() / predicted_positive_indexes.shape[0]
+
+```
+
 * , table, graph, comparison, ...
 * Web link
 
