@@ -15,8 +15,7 @@ Main code
 Load & Proces Data (각 종목의 종가)
 --------------------
 * FinancialDataLoader를 이용하여 코스피 종목의 종가를 불러올 수 있다.
-split_iter를 이용하여 서로 다른 시작점과 끝점을 가진 split_iter개의 sequantial 데이터가 만들어진다.
-이후 모든 데이터를 전날 대비 등락률로 정규화한다. (load_data.py)
+split_iter를 이용하여 서로 다른 시작점과 끝점을 가진 split_iter개의 sequantial 데이터가 만들어진다. 
 ```python
 import FinanceDataReader as fdr
 
@@ -43,38 +42,65 @@ Load & Proces Data (추가지수)
 10가지 추가 지수를 불러와 이전에 불러온 각 종목의 종가 데이터와 날짜가 같은 것끼리 결합(concatenate)한다. 날짜 쌍이 안 맞는 데이터는 버려진다(.dropna).
 ```python
 
-  df2 = fdr.DataReader('KS11', start_date, end_date)
+df2 = fdr.DataReader('KS11', start_date, end_date)
 
-  df_ratio2 = df2.iloc[:, 0:1].astype('float32').fillna(0)
-  df_log2 = pd.DataFrame(df_ratio2)
+df_ratio2 = df2.iloc[:, 0:1].astype('float32').fillna(0)
+df_log2 = pd.DataFrame(df_ratio2)
 
 
-  df_dict = {
-      0 : fdr.DataReader('IXIC', start_date, end_date),#나스닥
-      1 : fdr.DataReader('KQ11', start_date, end_date),#코스닥
-      2 : fdr.DataReader('USD/KRW', start_date, end_date),#달러/원
-      3 : fdr.DataReader('KS50', start_date, end_date),#코스피50
-      4 : fdr.DataReader('KS100', start_date, end_date),#코스피100
-      5 : fdr.DataReader('KS200', start_date, end_date),#코스피200
-      6 : fdr.DataReader('NG', start_date, end_date),#천연가스 선물
-      7 : fdr.DataReader('ZG', start_date, end_date),#금 선물
-      8 : fdr.DataReader('VCB', start_date, end_date),#베트남무역은행
-      9 : fdr.DataReader('US1MT=X', start_date, end_date),#미국채권1개월수익률
-  }
-  
-  for i in range(len(df_dict)):
-    extra_df = df_dict[i]
-    df_ratio_extra = extra_df.iloc[:, 0:1].astype('float32').fillna(0) #((extra_df.iloc[:, 0:1].astype('float32') - extra_df.iloc[:, 0:1].shift().astype('float32')) / extra_df.iloc[:, 0:1].shift().astype('float32')).fillna(0)
-    df_log_extra = pd.DataFrame(df_ratio_extra)
+df_dict = {
+    0 : fdr.DataReader('IXIC', start_date, end_date),#나스닥
+    1 : fdr.DataReader('KQ11', start_date, end_date),#코스닥
+    2 : fdr.DataReader('USD/KRW', start_date, end_date),#달러/원
+    3 : fdr.DataReader('KS50', start_date, end_date),#코스피50
+    4 : fdr.DataReader('KS100', start_date, end_date),#코스피100
+    5 : fdr.DataReader('KS200', start_date, end_date),#코스피200
+    6 : fdr.DataReader('NG', start_date, end_date),#천연가스 선물
+    7 : fdr.DataReader('ZG', start_date, end_date),#금 선물
+    8 : fdr.DataReader('VCB', start_date, end_date),#베트남무역은행
+    9 : fdr.DataReader('US1MT=X', start_date, end_date),#미국채권1개월수익률
+}
 
-    df_log2 = pd.concat([df_log2, df_log_extra],axis=1)
+for i in range(len(df_dict)):
+  extra_df = df_dict[i]
+  df_ratio_extra = extra_df.iloc[:, 0:1].astype('float32').fillna(0) #((extra_df.iloc[:, 0:1].astype('float32') - extra_df.iloc[:, 0:1].shift().astype('float32')) / extra_df.iloc[:, 0:1].shift().astype('float32')).fillna(0)
+  df_log_extra = pd.DataFrame(df_ratio_extra)
 
-    df_train2 = df_log2.iloc[:]
-    df_test2 = df_log2.iloc[:]
+  df_log2 = pd.concat([df_log2, df_log_extra],axis=1)
 
-    df_train =pd.concat([df_train1, df_train2],axis=1).dropna(axis=0)[-min_train_size:]
-    df_test = pd.concat([df_test1, df_test2],axis=1).dropna(axis=0)
+  df_train2 = df_log2.iloc[:]
+  df_test2 = df_log2.iloc[:]
+
+  df_train =pd.concat([df_train1, df_train2],axis=1).dropna(axis=0)[-min_train_size:]
+  df_test = pd.concat([df_test1, df_test2],axis=1).dropna(axis=0)
 ```
+
+등락률 계산
+--------------------
+* 합쳐진 학습데이터를 하나씩 읽어 전날대비 등락률로 데이터를 변조하였다.
+```python
+df_train_ = np.array([])
+previous_train = np.zeros(df_train.shape[1])
+for num, i in enumerate(df_train.to_numpy()):#[::sample_step]):
+    if num == 0:
+        df_train_ = np.expand_dims(previous_train, axis=0) 
+    else:
+        if (previous_train == 0).any():
+          print(previous_train)
+        new_item = (i - previous_train) / previous_train
+        df_train_ = np.append(df_train_, np.expand_dims(new_item, axis=0), axis=0)
+    previous_train = i
+```
+
+Classification용 타겟 데이터 생성
+--------------------
+* max_test_size(11로 설정) 일 이후의 종가의 변화율을 계산하여 그것이 2% 이상이면 '상승', -2% 이하면 '하락', 둘 다 아닌 것은 '유지'로 분류하였다.
+```python
+df_test = df_test.to_numpy()
+df_test = np.array([(df_test[-1] - df_test[0])/ df_test[0] >= 0.02, (df_test[-1] - df_test[0])/ df_test[0] < -0.02])
+df_test = np.append(df_test, np.expand_dims(np.logical_not(df_test[0]) * np.logical_not(df_test[1]), axis=0), axis=0)
+```
+
 * 시퀀스 데이터를 처리하기 위해 기존의 2D Conv를 모두 1D Conv로 교체하였다. (model.py)
 ```python
 def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> nn.Conv1d:
