@@ -17,7 +17,38 @@
 |  Topic2  |       |       |       |       |     Link2    |
 
 ## Results
-* Main code, table, graph, comparison, ...
+* Main code
+
+** load_data
+FinancialDataLoader를 이용하여 코스피 종목의 종가를 불러올 수 있다.
+split_iter를 이용하여 서로 다른 시작점과 끝점을 가진 split_iter개의 sequantial 데이터가 만들어진다.
+이후 모든 데이터를 전날 대비 등락률로 정규화한다.
+```
+import FinanceDataReader as fdr
+
+read_lines = np.flip(df_kospi.to_numpy(), axis=0)[:100]
+...
+
+for line in np.flip(read_lines, axis=0):
+ try:
+   df = fdr.DataReader(line[0], start_date, end_date)
+  df_ratio = df.iloc[:, 3].astype('float32')
+  df_log1 = pd.DataFrame(df_ratio)
+  df_ratios = np.append(df_ratios, df_ratio.to_numpy())
+
+  for j in range(0,split_iter):
+      split_point_start = j * max_test_size
+      split_point_end = (split_iter - j + 1) * max_test_size
+      df_train1 = df_log1.iloc[-max_train_size+split_point_start:-split_point_end]
+      df_test1 = df_log1.iloc[-split_point_end:-split_point_end+max_test_size]
+      df_train2 = df_log2.iloc[:]
+      df_test2 = df_log2.iloc[:]
+```
+
+
+
+
+* , table, graph, comparison, ...
 * Web link
 
 ``` C++
