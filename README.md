@@ -12,7 +12,7 @@
 
 Main code
 --------------------
-Load & Proces Data (각 종목의 종가)
+Load & Process Data (각 종목의 종가)
 --------------------
 * FinancialDataLoader를 이용하여 코스피 종목의 종가를 불러올 수 있다.
 split_iter를 이용하여 서로 다른 시작점과 끝점을 가진 split_iter개의 sequantial 데이터가 만들어진다. 
@@ -36,7 +36,7 @@ for line in np.flip(read_lines, axis=0):
       df_test1 = df_log1.iloc[-split_point_end:-split_point_end+max_test_size]
 ```
 
-Load & Proces Data (추가지수)
+Load & Process Data (추가지수)
 --------------------
 * FinancialDataLoader를 이용하여 종목 뿐 아니라 주식시장에 영향을 미치는 각종 지수의 데이터를 불러올 수 있다.
 10가지 추가 지수를 불러와 이전에 불러온 각 종목의 종가 데이터와 날짜가 같은 것끼리 결합(concatenate)한다. 날짜 쌍이 안 맞는 데이터는 버려진다(.dropna).
