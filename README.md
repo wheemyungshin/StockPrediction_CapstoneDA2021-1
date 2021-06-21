@@ -17,13 +17,12 @@
 |  Topic2  |       |       |       |       |     Link2    |
 
 ## Results
-* Main code
-
-** load_data
-FinancialDataLoader를 이용하여 코스피 종목의 종가를 불러올 수 있다.
+Main code
+--------------------
+* FinancialDataLoader를 이용하여 코스피 종목의 종가를 불러올 수 있다.
 split_iter를 이용하여 서로 다른 시작점과 끝점을 가진 split_iter개의 sequantial 데이터가 만들어진다.
-이후 모든 데이터를 전날 대비 등락률로 정규화한다.
-```
+이후 모든 데이터를 전날 대비 등락률로 정규화한다. (load_data.py)
+```python
 import FinanceDataReader as fdr
 
 read_lines = np.flip(df_kospi.to_numpy(), axis=0)[:100]
@@ -45,7 +44,13 @@ for line in np.flip(read_lines, axis=0):
       df_test2 = df_log2.iloc[:]
 ```
 
-
+* 시퀀스 데이터를 처리하기 위해 기존의 2D Conv를 모두 1D Conv로 교체하였다. (model.py)
+```python
+def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> nn.Conv1d:
+    """3x3 convolution with padding"""
+    return nn.Conv1d(in_planes, out_planes, kernel_size=3, stride=stride,
+                     padding=dilation, groups=groups, bias=False, dilation=dilation)
+```
 
 
 * , table, graph, comparison, ...
