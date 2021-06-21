@@ -73,19 +73,17 @@ def accuracy(output, target, threshold=0.5):
     soso_fail = (target[:,2])[predicted_positive_indexes]
     
     return correct.sum() / output.shape[0], true_positive.sum() / predicted_positive_indexes.shape[0], crucial_fail.sum() / predicted_positive_indexes.shape[0], soso_fail.sum() / predicted_positive_indexes.shape[0]
-
+    
 ```
 
-* , table, graph, comparison, ...
-* Web link
+Tables and Graphs
+------------------------------------------
+* LSTM을 사용하여 주가를 예측한 결과
+![image](https://user-images.githubusercontent.com/40812418/122758082-57543180-d2d3-11eb-870b-6d2255fd6b07.png)
 
-``` C++
-void Example(int x, int y) {
-   ...  
-   ... // comment
-   ...
-}
-```
+* 1D ResNet을 사용하여 주가를 예측한 결과(Accuracy/Precision/Crucial-Fail/Soso-Fail)
+![image](https://user-images.githubusercontent.com/40812418/122758439-c2056d00-d2d3-11eb-9c5f-8829488c0483.png)
+
 
 ## Conclusion
 * Summary, contribution, ...
