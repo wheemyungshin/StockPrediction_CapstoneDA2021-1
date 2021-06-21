@@ -144,6 +144,13 @@ Tables and Graphs
 * 1D ResNet을 사용하여 주가를 예측한 결과(Accuracy/Precision/Crucial-Fail/Soso-Fail)
 ![image](https://user-images.githubusercontent.com/40812418/122758439-c2056d00-d2d3-11eb-9c5f-8829488c0483.png)
 
+GradCAM
+--------------------
+* 각 추가 지수의 기여도를 정량적으로 알아보기 위하여 유명한 딥러닝 분석 기법인 GradCAM을 사용하였다.
+각 지수가 생성하는 gradient를 그래프로 나타낼 수 있었으며 그것의 합을 계산하여 그 합이 큰 순으로 순위를 매길 수 있었다.
+![image](https://user-images.githubusercontent.com/40812418/122761548-545b4000-d2d7-11eb-8dff-f6b07c5d1495.png)
+![image](https://user-images.githubusercontent.com/40812418/122761653-70f77800-d2d7-11eb-9beb-896a30695220.png)
+
 
 ## Conclusion
 * Summary, contribution, ...
