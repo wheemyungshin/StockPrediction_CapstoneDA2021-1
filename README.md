@@ -10,12 +10,6 @@
 - 목표: 개발된 딥러닝 모델이 예측한 정보(n일 이후의 차트 예측 혹은 상승 여부 등)을 바탕으로, 실전 주식투자에서 수익을 거두는 것이 최종 목표이다.
 - 방법: Python 프로그래밍 언어와 FinanceDataReader 라이브러리를 활용한다. 딥 러닝 모델의 설계는 tensorflow (LSTM류의 sequence data를 사용하는 딥러닝 모델 설계에 사용)와 pytorch(Binary Classification 모델 설계에 사용)를, 데이터 처리에는 pandas와 numpy를 활용에 알맞게 사용하였다. FinanceDataReader로부터 주식 차트 데이터를 불러와 적절한 전처리를 한 후, 설계한 딥러닝 모델에 넣어 다음 차트의 동향을 예측하도록 하였다. 지속적인 학습을 위한 최신 데이터는 Investing.com을 크롤링하여 얻어내었다.
 
-## Schedule
-| Contents | March | April |  May  | June  |   Progress   |
-|----------|-------|-------|-------|-------|--------------|
-|  Topic1  |       |       |       |       |     Link1    |
-|  Topic2  |       |       |       |       |     Link2    |
-
 ## Results
 Main code
 --------------------
