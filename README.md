@@ -101,7 +101,9 @@ df_test = np.array([(df_test[-1] - df_test[0])/ df_test[0] >= 0.02, (df_test[-1]
 df_test = np.append(df_test, np.expand_dims(np.logical_not(df_test[0]) * np.logical_not(df_test[1]), axis=0), axis=0)
 ```
 
-* 시퀀스 데이터를 처리하기 위해 기존의 2D Conv를 모두 1D Conv로 교체하였다. (model.py)
+모델 변경
+--------------------
+* 시퀀스 데이터를 처리하기 위해 기존의 2D Conv를 모두 1D Conv로 교체하였다. 
 ```python
 def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> nn.Conv1d:
     """3x3 convolution with padding"""
@@ -109,7 +111,8 @@ def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, d
                      padding=dilation, groups=groups, bias=False, dilation=dilation)
 ```
 
-
+정확도 측정
+--------------------
 * 실제 수익성을 알아보기 위해 accurcay를 포함한 세가지 지수(Precision, Crucial-Fail, Soso-Fail)를 계산하였다.
 또한, Thresholding을 통해 최적의 precision을 갖는 threshold를 선택하여 사용할 수 있다. (utils.py)
 
