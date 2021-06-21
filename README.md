@@ -10,8 +10,9 @@
 - 목표: 개발된 딥러닝 모델이 예측한 정보(n일 이후의 차트 예측 혹은 상승 여부 등)을 바탕으로, 실전 주식투자에서 수익을 거두는 것이 최종 목표이다.
 - 방법: Python 프로그래밍 언어와 FinanceDataReader 라이브러리를 활용한다. 딥 러닝 모델의 설계는 tensorflow (LSTM류의 sequence data를 사용하는 딥러닝 모델 설계에 사용)와 pytorch(Binary Classification 모델 설계에 사용)를, 데이터 처리에는 pandas와 numpy를 활용에 알맞게 사용하였다. FinanceDataReader로부터 주식 차트 데이터를 불러와 적절한 전처리를 한 후, 설계한 딥러닝 모델에 넣어 다음 차트의 동향을 예측하도록 하였다. 지속적인 학습을 위한 최신 데이터는 Investing.com을 크롤링하여 얻어내었다.
 
-## Results
 Main code
+--------------------
+Load & Proces Data (각 종목의 종가)
 --------------------
 * FinancialDataLoader를 이용하여 코스피 종목의 종가를 불러올 수 있다.
 split_iter를 이용하여 서로 다른 시작점과 끝점을 가진 split_iter개의 sequantial 데이터가 만들어진다.
@@ -34,10 +35,46 @@ for line in np.flip(read_lines, axis=0):
       split_point_end = (split_iter - j + 1) * max_test_size
       df_train1 = df_log1.iloc[-max_train_size+split_point_start:-split_point_end]
       df_test1 = df_log1.iloc[-split_point_end:-split_point_end+max_test_size]
-      df_train2 = df_log2.iloc[:]
-      df_test2 = df_log2.iloc[:]
 ```
 
+Load & Proces Data (추가지수)
+--------------------
+* FinancialDataLoader를 이용하여 종목 뿐 아니라 주식시장에 영향을 미치는 각종 지수의 데이터를 불러올 수 있다.
+10가지 추가 지수를 불러와 이전에 불러온 각 종목의 종가 데이터와 날짜가 같은 것끼리 결합(concatenate)한다. 날짜 쌍이 안 맞는 데이터는 버려진다(.dropna).
+```python
+
+  df2 = fdr.DataReader('KS11', start_date, end_date)
+
+  df_ratio2 = df2.iloc[:, 0:1].astype('float32').fillna(0)
+  df_log2 = pd.DataFrame(df_ratio2)
+
+
+  df_dict = {
+      0 : fdr.DataReader('IXIC', start_date, end_date),#나스닥
+      1 : fdr.DataReader('KQ11', start_date, end_date),#코스닥
+      2 : fdr.DataReader('USD/KRW', start_date, end_date),#달러/원
+      3 : fdr.DataReader('KS50', start_date, end_date),#코스피50
+      4 : fdr.DataReader('KS100', start_date, end_date),#코스피100
+      5 : fdr.DataReader('KS200', start_date, end_date),#코스피200
+      6 : fdr.DataReader('NG', start_date, end_date),#천연가스 선물
+      7 : fdr.DataReader('ZG', start_date, end_date),#금 선물
+      8 : fdr.DataReader('VCB', start_date, end_date),#베트남무역은행
+      9 : fdr.DataReader('US1MT=X', start_date, end_date),#미국채권1개월수익률
+  }
+  
+  for i in range(len(df_dict)):
+    extra_df = df_dict[i]
+    df_ratio_extra = extra_df.iloc[:, 0:1].astype('float32').fillna(0) #((extra_df.iloc[:, 0:1].astype('float32') - extra_df.iloc[:, 0:1].shift().astype('float32')) / extra_df.iloc[:, 0:1].shift().astype('float32')).fillna(0)
+    df_log_extra = pd.DataFrame(df_ratio_extra)
+
+    df_log2 = pd.concat([df_log2, df_log_extra],axis=1)
+
+    df_train2 = df_log2.iloc[:]
+    df_test2 = df_log2.iloc[:]
+
+    df_train =pd.concat([df_train1, df_train2],axis=1).dropna(axis=0)[-min_train_size:]
+    df_test = pd.concat([df_test1, df_test2],axis=1).dropna(axis=0)
+```
 * 시퀀스 데이터를 처리하기 위해 기존의 2D Conv를 모두 1D Conv로 교체하였다. (model.py)
 ```python
 def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> nn.Conv1d:
